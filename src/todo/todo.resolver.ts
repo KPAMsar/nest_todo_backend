@@ -47,16 +47,20 @@ export class TodoResolver {
 
   @Mutation((returns) => TodoType)
   async updateTodo(
-    id: string,
-    { task, status }: { task: string; status: string },
+    @Args('id') id: string,
+    @Args('task') task: string,
+    @Args('status') status: string,
   ): Promise<any> {
-    console.log('hheeh', { task, status });
-    const updatedTodo = await this.todoService.updateTodo(id, { task, status });
+    console.log('Updating Todo with ID:', id);
+
+    const updateTodoDto: CreateTodoDto = { task, status };
+    const updatedTodo = await this.todoService.updateTodo(id, updateTodoDto);
 
     if (!updatedTodo) {
       throw new Error(`Todo with ID ${id} not found.`);
     }
 
+    console.log('Updated Todo:', updatedTodo);
     return updatedTodo;
   }
 
@@ -70,29 +74,4 @@ export class TodoResolver {
     console.log('deletted', deletedTodo);
     return deletedTodo;
   }
-
-  // @Mutation((returns) => TodoType)
-  // async createTodo(
-  //   @Args('task') task: string,
-  //   @Args('status') status: string,
-  // ): Promise<{ success: boolean; message: string; data?: any }> {
-  //   try {
-  //     const createTodoDto: CreateTodoDto = { task, status };
-  //     const createdTodo = await this.todoService.create(createTodoDto);
-
-  //     if (!createdTodo) {
-  //       throw new Error('Failed to create todo');
-  //     }
-
-  //     return {
-  //       success: true,
-  //       message: 'Todo created successfully',
-  //       data: createdTodo,
-  //     };
-  //   } catch (error) {
-  //     // Handle the error based on your requirements
-  //     console.error('Error creating todo:', error.message);
-  //     return { success: false, message: 'Failed to create todo' };
-  //   }
-  // }
 }

@@ -6,6 +6,7 @@ export class TodoType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @Field((type) => ID)
   id: string;
+
   @Field()
   task!: string;
 

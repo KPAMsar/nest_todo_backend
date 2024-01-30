@@ -44,7 +44,7 @@ export class TodoService {
       updateTodoDto,
       { new: true, useFindAndModify: false },
     );
-
+    console.log('id', id);
     if (!updatedTodo) {
       throw new Error(`Todo with ID ${id} not found.`);
     }
