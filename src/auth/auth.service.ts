@@ -3,6 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -10,35 +11,21 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async signIn(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
+  async signIn(email: string, password: string) {
+    console.log('signInDto email', email);
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
-      // User not found
       throw new UnauthorizedException();
     }
-    console.log('user', user);
-    console.log('password', password);
-    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    console.log('mat', isPasswordValid);
-    console.log('jjj', user.password);
-    // if (!isPasswordValid) {
-    //   // Password does not match
-    //   throw new UnauthorizedException();
-    // }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     console.log('isPasswordValid', isPasswordValid);
     const payload = { sub: user.name, email: user.email };
 
-    return {
-      access_token: this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET || 'test',
-      }),
-    };
+    const access_token = this.jwtService.sign(payload);
+    return access_token;
   }
 
   async validateUser(username: string, pass: string): Promise<any> {

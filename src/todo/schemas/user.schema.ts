@@ -6,10 +6,10 @@ export type TodoDocument = HydratedDocument<Todo>;
 @Schema()
 export class Todo {
   @Prop()
-  task: string;
+  task!: string;
 
   @Prop()
-  status: string;
+  status!: string;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

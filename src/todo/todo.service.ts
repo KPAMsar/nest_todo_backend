@@ -17,6 +17,38 @@ export class TodoService {
   }
 
   async getTodo(id: string): Promise<Todo> {
-    return this.todoModel.findById({ id });
+    return await this.todoModel.findById({ id });
+  }
+
+  async getAllTodo(): Promise<Todo[]> {
+    try {
+      const todos = await this.todoModel.find().exec();
+      return todos;
+    } catch (error) {
+      console.error(error);
+      throw new Error('An error occurred while fetching todo data.');
+    }
+  }
+
+  async deleteTodo(id: string): Promise<void> {
+    const result = await this.todoModel.deleteOne({ _id: id }).exec();
+
+    if (result.deletedCount === 0) {
+      throw new Error(`Todo with ID ${id} not found.`);
+    }
+  }
+
+  async updateTodo(id: string, updateTodoDto: CreateTodoDto): Promise<Todo> {
+    const updatedTodo = await this.todoModel.findByIdAndUpdate(
+      id,
+      updateTodoDto,
+      { new: true, useFindAndModify: false },
+    );
+
+    if (!updatedTodo) {
+      throw new Error(`Todo with ID ${id} not found.`);
+    }
+
+    return updatedTodo;
   }
 }

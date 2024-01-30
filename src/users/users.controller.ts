@@ -17,9 +17,9 @@ export class UserController {
   async create(@Body() createUserDto: CreateUserDto) {
     try {
       const saltOrRounds = 10;
-      const password = 'random_password';
+      const password = createUserDto.password;
       const passwordhash = await bcrypt.hash(password, saltOrRounds);
-      console.log('hased password', passwordhash);
+
       createUserDto.password = passwordhash;
       const createdUser = await this.UsersService.create(createUserDto);
       return {

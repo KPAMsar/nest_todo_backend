@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TodoModule } from './todo/todo.module';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { TodoModule } from './todo/todo.module';
     TodoModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EmailService],
 })
 export class AppModule {}
