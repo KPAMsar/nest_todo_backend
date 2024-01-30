@@ -16,14 +16,21 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
+      console.log('User not found.');
       throw new UnauthorizedException();
     }
+
+    console.log('Retrieved user:', user);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     console.log('isPasswordValid', isPasswordValid);
-    const payload = { sub: user.name, email: user.email };
 
+    return { isAvalidUser: isPasswordValid, userEmail: user.email };
+  }
+
+  async createAccessToken(email: string) {
+    const payload = { sub: email };
     const access_token = this.jwtService.sign(payload);
     return access_token;
   }

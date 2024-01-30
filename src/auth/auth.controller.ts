@@ -30,11 +30,22 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     console.log('signInDtonn', signInDto.email);
-    const access_token = await this.authService.signIn(
+
+    const result = await this.authService.signIn(
       signInDto.email,
       signInDto.password,
     );
 
+    // return console.log('result', result);
+    if (!result.isAvalidUser) {
+      return res
+        .status(401)
+        .send({ status: 'error', message: 'Invalid credentials' });
+    }
+
+    const access_token = await this.authService.createAccessToken(
+      signInDto.email,
+    );
     return res
       .cookie('access_token', access_token, {
         httpOnly: false,
