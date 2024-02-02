@@ -33,18 +33,6 @@ export class TodoResolver {
     return { success: true };
   }
 
-  // @Mutation((returns) => TodoType)
-  // async updateTodo(id: string, updateTodoDto: CreateTodoDto): Promise<any> {
-  //   console.log('hheeh', updateTodoDto);
-  //   const updatedTodo = await this.todoService.updateTodo(id, updateTodoDto);
-
-  //   if (!updatedTodo) {
-  //     throw new Error(`Todo with ID ${id} not found.`);
-  //   }
-
-  //   return updatedTodo;
-  // }
-
   @Mutation((returns) => TodoType)
   async updateTodo(
     @Args('id') id: string,
